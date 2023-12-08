@@ -17,3 +17,4 @@ async function serverAuthentication(authentication:any, publicId:string) {
 
     const authenticationParsed = await server.verifyAuthentication(authentication, credentialKey, expected)
 }
+
