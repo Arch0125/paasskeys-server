@@ -1,18 +1,5 @@
 import { client } from "@passwordless-id/webauthn";
-const { MongoClient } = require("mongodb");
-
-const mongoose = require("mongoose");
-
-const PORT = 5002;
-const MONGO_URL =
-  "mongodb+srv://Route-2:Rutusway@cluster0.rcijt7q.mongodb.net/?retryWrites=true&w=majority";
-
-const client = new MongoClient(MONGO_URL);
-
-client.connect();
-
-const db = client.db("passKeys");
-const collection = db.collection("passKeys");
+import { user } from "@pushprotocol/restapi";
 
 async function ClientRegistration(username: string) {
   try {
@@ -26,11 +13,25 @@ async function ClientRegistration(username: string) {
       debug: false,
     });
 
-    const details = {
-      [username]: registration.credential.id,
-    };
+    const userDetails = [
+      {
+        credId: registration.credential.id,
+        username: username,
+      },
+    ];
 
-    await collection.insertOne(details);
+    console.log(userDetails);
+
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+
+    const storedDetailsString = localStorage.getItem("userDetails");
+
+    const storedDetails = storedDetailsString
+      ? JSON.parse(storedDetailsString)
+      : null;
+
+    console.log(storedDetails, "stored details ");
+
     console.log(registration);
     return registration.credential.id;
   } catch (e) {
@@ -51,15 +52,5 @@ async function ClientAuthentication(publicId: string) {
     console.log("Authentication failed");
   }
 }
-
-mongoose.set("strictQuery", false);
-mongoose
-  .connect(MONGO_URL)
-  .then(() => {
-    console.log(`Connected ----> ${PORT}`);
-  })
-  .catch((error: any) => {
-    console.error("MongoDB connection error:", error);
-  });
 
 export { ClientRegistration, ClientAuthentication };

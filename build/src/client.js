@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientAuthentication = exports.ClientRegistration = void 0;
 const webauthn_1 = require("@passwordless-id/webauthn");
+
 function ClientRegistration(username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -21,10 +22,23 @@ function ClientRegistration(username) {
                 timeout: 60000,
                 attestation: false,
                 userHandle: "recommended to set it to a random 64 bytes value",
-                debug: false
+                debug: false,
             });
+            const userDetails = [{
+                    credId: registration.credential.id,
+                    username: username,
+                    // Other necessary details from the registration object can be added here
+                    // For example, registration.clientData, registration.authenticatorData, etc.
+                }];
+            console.log(userDetails); // Output: { 'abcd': 'toCoAyexmXYAzXfIRfu37hUKm8GL2URLBm-_tGRBZoE', ...otherDetails }
+            localStorage.setItem("userDetails", JSON.stringify(userDetails));
+            const storedDetailsString = localStorage.getItem("userDetails");
+            const storedDetails = storedDetailsString
+                ? JSON.parse(storedDetailsString)
+                : null;
+            console.log(storedDetails, "stored details ");
             console.log(registration);
-            return registration.credential;
+            return registration.credential.id;
         }
         catch (e) {
             console.log(e);
@@ -37,9 +51,9 @@ function ClientAuthentication(publicId) {
         try {
             const challenge = "56535b13-5d93-4194-a282-f234c1c24500";
             const authentication = yield webauthn_1.client.authenticate([publicId], challenge, {
-                "authenticatorType": "auto",
-                "userVerification": "required",
-                "timeout": 60000
+                authenticatorType: "auto",
+                userVerification: "required",
+                timeout: 60000,
             });
             return authentication;
         }
