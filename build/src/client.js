@@ -11,34 +11,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientAuthentication = exports.ClientRegistration = void 0;
 const webauthn_1 = require("@passwordless-id/webauthn");
-
 function ClientRegistration(username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const challenge = "a7c61ef9-dc23-4806-b486-2428938a547e";
-            const registration = yield webauthn_1.client.register(username, challenge, {
-                authenticatorType: "auto",
-                userVerification: "required",
-                timeout: 60000,
-                attestation: false,
-                userHandle: "recommended to set it to a random 64 bytes value",
-                debug: false,
-            });
-            const userDetails = [{
-                    credId: registration.credential.id,
-                    username: username,
-                    // Other necessary details from the registration object can be added here
-                    // For example, registration.clientData, registration.authenticatorData, etc.
-                }];
-            console.log(userDetails); // Output: { 'abcd': 'toCoAyexmXYAzXfIRfu37hUKm8GL2URLBm-_tGRBZoE', ...otherDetails }
-            localStorage.setItem("userDetails", JSON.stringify(userDetails));
-            const storedDetailsString = localStorage.getItem("userDetails");
-            const storedDetails = storedDetailsString
-                ? JSON.parse(storedDetailsString)
-                : null;
-            console.log(storedDetails, "stored details ");
-            console.log(registration);
-            return registration.credential.id;
+            const uname = localStorage.getItem("userDetails");
+            const storedUsers = uname ? JSON.parse(uname) : null;
+            const users = storedUsers.findIndex((user) => user.username === username);
+            console.log(users, "exists");
+            if (users === -1) {
+                const challenge = "a7c61ef9-dc23-4806-b486-2428938a547e";
+                const registration = yield webauthn_1.client.register(username, challenge, {
+                    authenticatorType: "auto",
+                    userVerification: "required",
+                    timeout: 60000,
+                    attestation: false,
+                    userHandle: "recommended to set it to a random 64 bytes value",
+                    debug: false,
+                });
+                const userDetails = [
+                    {
+                        credId: registration.credential.id,
+                        username: username,
+                    },
+                ];
+                console.log(userDetails);
+                localStorage.setItem("userDetails", JSON.stringify(userDetails));
+                console.log(registration, "registraion new");
+                return registration.credential.id;
+            }
+            else {
+                const storedDetailsString = localStorage.getItem("userDetails");
+                const storedDetails = storedDetailsString
+                    ? JSON.parse(storedDetailsString)
+                    : null;
+                console.log(storedDetails[users].credId, "stored");
+                return storedDetails[users].credId;
+            }
         }
         catch (e) {
             console.log(e);
