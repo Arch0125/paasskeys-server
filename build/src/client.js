@@ -11,13 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientAuthentication = exports.ClientRegistration = void 0;
 const webauthn_1 = require("@passwordless-id/webauthn");
+const ethers_1 = require("ethers");
 function ClientRegistration(username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const uname = localStorage.getItem("userDetails");
-            const storedUsers = uname ? JSON.parse(uname) : null;
-            const users = storedUsers.findIndex((user) => user.username === username);
-            console.log(users, "exists");
+            let users = -1;
+            // const uname = localStorage.getItem("userDetails");
+            // const storedUsers = uname ? JSON.parse(uname) : null;
+            // users = storedUsers.findIndex(
+            //   (user: any) => user.username === username
+            // );
+            // console.log(users, "exists");
             if (users === -1) {
                 const challenge = "a7c61ef9-dc23-4806-b486-2428938a547e";
                 const registration = yield webauthn_1.client.register(username, challenge, {
@@ -37,7 +41,7 @@ function ClientRegistration(username) {
                 console.log(userDetails);
                 localStorage.setItem("userDetails", JSON.stringify(userDetails));
                 console.log(registration, "registraion new");
-                return registration.credential.id;
+                return ethers_1.ethers.utils.keccak256(registration.credential.id);
             }
             else {
                 const storedDetailsString = localStorage.getItem("userDetails");
@@ -45,7 +49,7 @@ function ClientRegistration(username) {
                     ? JSON.parse(storedDetailsString)
                     : null;
                 console.log(storedDetails[users].credId, "stored");
-                return storedDetails[users].credId;
+                return ethers_1.ethers.utils.keccak256(storedDetails[users].credId);
             }
         }
         catch (e) {
