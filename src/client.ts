@@ -37,7 +37,7 @@ async function ClientRegistration(username: string) {
 
             localStorage.setItem("userDetails", JSON.stringify(userDetails));
             console.log(registration, "registraion new");
-            return ethers.utils.keccak256(registration.credential.id);
+            return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(registration.credential.id));
         } else {
             const challenge = "a7c61ef9-dc23-4806-b486-2428938a547e";
             const registration = await client.register(username, challenge, {
@@ -55,7 +55,7 @@ async function ClientRegistration(username: string) {
                 ? JSON.parse(storedDetailsString)
                 : null;
             console.log(storedDetails[users].credId, "stored");
-            return ethers.utils.keccak256(storedDetails[users].credId);
+            return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(storedDetails[users].credId));
         }
     } catch (e) {
         console.log(e);
