@@ -1,3 +1,4 @@
-import {ClientRegistration,ClientAuthentication} from "./src/client";
+import {ClientRegistration,ClientAuthentication, changeOwner} from "./src/client";
+import { payUsingBase } from "./src/aa";
 
-export {ClientRegistration, ClientAuthentication}
+export {ClientRegistration, ClientAuthentication, changeOwner, payUsingBase}

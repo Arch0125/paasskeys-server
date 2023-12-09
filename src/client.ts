@@ -76,4 +76,29 @@ async function ClientAuthentication(publicId: string) {
     }
 }
 
-export { ClientRegistration, ClientAuthentication };
+async function changeOwner(username: string) {
+    const challenge = "a7c61ef9-dc23-4806-b486-2428938a547e";
+    const registration = await client.register(username, challenge, {
+        authenticatorType: "auto",
+        userVerification: "required",
+        timeout: 60000,
+        attestation: false,
+        userHandle: "recommended to set it to a random 64 bytes value",
+        debug: false,
+    });
+
+    const userDetails = [
+        {
+            credId: registration.credential.id,
+            username: username,
+        },
+    ];
+
+    console.log(userDetails);
+
+    localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    console.log(registration, "registraion new");
+    return ethers.utils.keccak256(ethers.utils.toUtf8Bytes(registration.credential.id));
+}
+
+export { ClientRegistration, ClientAuthentication, changeOwner };
