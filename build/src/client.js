@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeOwner = exports.ClientAuthentication = exports.ClientRegistration = void 0;
 const webauthn_1 = require("@passwordless-id/webauthn");
 const ethers_1 = require("ethers");
-// import { createPublicClient } from "viem";
 // export const publicClient = createPublicClient({
 // 	transport: http("https://CHAIN.infura.io/v3/API_KEY"),
 // });
