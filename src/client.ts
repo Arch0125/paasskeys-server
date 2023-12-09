@@ -1,5 +1,18 @@
 import { client } from "@passwordless-id/webauthn";
 import { ethers } from "ethers";
+import { createPublicClient } from "viem";
+
+
+
+export const publicClient = createPublicClient({
+	transport: http("https://CHAIN.infura.io/v3/API_KEY"),
+});
+ 
+// export const paymasterClient = createPimlicoPaymasterClient({
+// 	transport: http(
+// 		"https://api.pimlico.io/v2/CHAIN/rpc?apikey=API_KEY",
+// 	),
+// });
 
 async function ClientRegistration(username: string) {
     try {
