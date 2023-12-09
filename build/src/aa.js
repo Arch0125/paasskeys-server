@@ -9,9 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.payUsingBase = void 0;
+exports.payUsingSafe = exports.payUsingBase = void 0;
 const ethers_1 = require("ethers");
 const userop_1 = require("userop");
+const viem_1 = require("viem");
+const accounts_1 = require("permissionless/accounts");
 function payUsingBase(pvtKey) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,6 +33,20 @@ function payUsingBase(pvtKey) {
         console.log("Waiting for transaction...");
         const ev = yield res.wait();
         console.log(`Transaction hash: ${(_a = ev === null || ev === void 0 ? void 0 : ev.transactionHash) !== null && _a !== void 0 ? _a : null}`);
+        return { address, ev };
     });
 }
 exports.payUsingBase = payUsingBase;
+function payUsingSafe(privateKey) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const publicClient = (0, viem_1.createPublicClient)({
+            transport: (0, viem_1.http)("https://CHAIN.infura.io/v3/API_KEY"),
+        });
+        const safeAccount = yield (0, accounts_1.privateKeyToSafeSmartAccount)(publicClient, {
+            privateKey: privateKey,
+            safeVersion: "1.4.1",
+            entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+        });
+    });
+}
+exports.payUsingSafe = payUsingSafe;
