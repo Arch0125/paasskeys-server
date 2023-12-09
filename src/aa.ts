@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { Presets, Client } from "userop";
 import { createPublicClient, http } from "viem";
-// import {privateKeyToSafeSmartAccount} from "permissionless/accounts"
 
 async function payUsingBase(pvtKey: string) {
     const rpcUrl = "https://api.stackup.sh/v1/node/bab86e1e6e56836c1b6a5948d3d38e5308164f5ea5699359f1f49bc231f3dcf4";
@@ -43,6 +42,6 @@ async function payUsingBase(pvtKey: string) {
 //         safeVersion: "1.4.1",
 //         entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
 //     });
-// }
+// 
 
 export { payUsingBase };
