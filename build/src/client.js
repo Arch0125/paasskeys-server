@@ -12,6 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.changeOwner = exports.ClientAuthentication = exports.ClientRegistration = void 0;
 const webauthn_1 = require("@passwordless-id/webauthn");
 const ethers_1 = require("ethers");
+// import { createPublicClient } from "viem";
+// export const publicClient = createPublicClient({
+// 	transport: http("https://CHAIN.infura.io/v3/API_KEY"),
+// });
+// export const paymasterClient = createPimlicoPaymasterClient({
+// 	transport: http(
+// 		"https://api.pimlico.io/v2/CHAIN/rpc?apikey=API_KEY",
+// 	),
+// });
 function ClientRegistration(username) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

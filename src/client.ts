@@ -1,12 +1,12 @@
 import { client } from "@passwordless-id/webauthn";
 import { ethers } from "ethers";
-import { createPublicClient } from "viem";
+// import { createPublicClient } from "viem";
 
 
 
-export const publicClient = createPublicClient({
-	transport: http("https://CHAIN.infura.io/v3/API_KEY"),
-});
+// export const publicClient = createPublicClient({
+// 	transport: http("https://CHAIN.infura.io/v3/API_KEY"),
+// });
  
 // export const paymasterClient = createPimlicoPaymasterClient({
 // 	transport: http(
