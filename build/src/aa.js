@@ -9,9 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.payUsingBase = void 0;
+exports.generateUsingBase = exports.payUsingBase = void 0;
 const ethers_1 = require("ethers");
 const userop_1 = require("userop");
+function generateUsingBase(pvtKey) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const rpcUrl = "https://api.stackup.sh/v1/node/bab86e1e6e56836c1b6a5948d3d38e5308164f5ea5699359f1f49bc231f3dcf4";
+        const paymasterRpcUrl = "https://api.stackup.sh/v1/paymaster/bab86e1e6e56836c1b6a5948d3d38e5308164f5ea5699359f1f49bc231f3dcf4";
+        const paymasterContext = { type: "payg" };
+        const paymaster = userop_1.Presets.Middleware.verifyingPaymaster(paymasterRpcUrl, paymasterContext);
+        const provider = new ethers_1.ethers.providers.JsonRpcProvider(rpcUrl);
+        const signer = new ethers_1.ethers.Wallet(pvtKey);
+        var builder = yield userop_1.Presets.Builder.SimpleAccount.init(signer, rpcUrl);
+        console.log(builder);
+        const address = builder.getSender();
+        console.log(`Account address: ${address}`);
+        return address;
+    });
+}
+exports.generateUsingBase = generateUsingBase;
 function payUsingBase(pvtKey) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -20,7 +36,7 @@ function payUsingBase(pvtKey) {
         const paymasterContext = { type: "payg" };
         const paymaster = userop_1.Presets.Middleware.verifyingPaymaster(paymasterRpcUrl, paymasterContext);
         const provider = new ethers_1.ethers.providers.JsonRpcProvider(rpcUrl);
-        const signer = new ethers_1.ethers.Wallet("0x9f18ac0a894949b08c9e6f3dff463233c6a5f7ad52793df07f33421a1202eab0");
+        const signer = new ethers_1.ethers.Wallet(pvtKey);
         var builder = yield userop_1.Presets.Builder.SimpleAccount.init(signer, rpcUrl);
         console.log(builder);
         const address = builder.getSender();
